@@ -19,19 +19,25 @@ public class MainActivity extends AppCompatActivity {
 
     String languageSelected;
     TextView textView;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences sharedPreferences = this.getSharedPreferences("com.example.razli.myapplication", Context.MODE_PRIVATE);
-
         textView = findViewById(R.id.textView);
-        languageSelected = "";
 
-        // Allow user to select language preference when first opening the app
-        showLanguageSelectDialog();
+        sharedPreferences = this.getSharedPreferences("com.example.razli.myapplication", Context.MODE_PRIVATE);
+        languageSelected = sharedPreferences.getString("languageSelected", "");
+        Log.i(TAG, "onCreate: Last saved language: " + languageSelected);
+
+        // Switch to saved language (taken from SharedPreferences)
+        toggleLanguage(languageSelected);
+
+        // Allow user to select language preference if first opening the app
+        if(languageSelected.equals("")) {
+            showLanguageSelectDialog();
+        }
     }
 
     @Override
@@ -81,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         languageSelected = "english";
+                        sharedPreferences.edit().putString("languageSelected", languageSelected).apply();
+                        Log.i(TAG, "onClick: SharedPreference holds: " + sharedPreferences.getString("languageSelected", ""));
                         toggleLanguage(languageSelected);
                     }
                 })
@@ -88,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         languageSelected = "malay";
+                        sharedPreferences.edit().putString("languageSelected", languageSelected).apply();
+                        Log.i(TAG, "onClick: SharedPreference holds: " + sharedPreferences.getString("languageSelected", ""));
                         toggleLanguage(languageSelected);
                     }
                 })
