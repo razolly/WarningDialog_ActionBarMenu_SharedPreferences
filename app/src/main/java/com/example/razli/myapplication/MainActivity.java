@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         languageSelected = sharedPreferences.getString("languageSelected", "");
         Log.i(TAG, "onCreate: Last saved language: " + languageSelected);
 
-        // Switch to saved language (taken from SharedPreferences)
-        toggleLanguage(languageSelected);
-
-        // Allow user to select language preference if first opening the app
+        // Allow user to select language preference if first time opening the app
+        // else switch to saved language (taken from SharedPreferences)
         if(languageSelected.equals("")) {
             showLanguageSelectDialog();
+        } else {
+            toggleLanguage(languageSelected);
         }
     }
 
